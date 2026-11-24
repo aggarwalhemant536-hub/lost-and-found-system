@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- 
+  LPU Lost & Found System
+  Made by: [Your Name], Reg No: [Your Reg No], Section: [Section]
+  File: item.html (Single Item Details & Claim Request)
+-->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Item Details | LPU Lost & Found System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-bar">
+    <div class="container">
+      <span>🎒 Lovely Professional University Campus Lost & Found Community</span>
+      <span>Helpline: <strong>01824-517000</strong> | <a href="admin.html">Admin Portal</a></span>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">
+        <span class="nav-logo-badge">LPU</span>
+        <span>Lost<span class="highlight">&</span>Found</span>
+      </a>
+
+      <!-- Hamburger button for mobile -->
+      <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">☰</button>
+
+      <!-- Nav links -->
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="index.html" class="nav-link">🏠 Home</a></li>
+        <li><a href="post.html" class="nav-link">➕ Post Item</a></li>
+        <li><a href="admin.html" class="nav-link">🛡️ Admin Panel</a></li>
+        <li id="navLoginLink"><a href="login.html" class="nav-link">🔑 Student Login</a></li>
+        <li>
+          <!-- Student user pill if logged in -->
+          <div id="navUserPill" class="user-pill" style="display: none;"></div>
+        </li>
+      </ul>
+
+      <!-- Nav actions (notifications) -->
+      <div class="nav-actions">
+        <div class="notif-wrapper">
+          <button class="notif-btn" id="notifBtn" title="Notifications" aria-label="Notifications">
+            🔔
+            <span class="notif-badge" id="notifBadge" style="display: none;">0</span>
+          </button>
+          
+          <div class="notif-dropdown" id="notifDropdown">
+            <div class="notif-header">
+              <h4>🔔 Campus Updates</h4>
+              <button class="clear-notif-btn" onclick="markAllNotificationsRead()">Mark read</button>
+            </div>
+            <div class="notif-list" id="notifList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="page-wrapper">
+    <div class="container" id="itemDetailsContainer">
+      
+      <!-- Back button -->
+      <div class="back-btn-row">
+        <a href="index.html" class="btn btn-outline-dark btn-sm">← Back to All Items</a>
+      </div>
+
+      <!-- Item Detail Card -->
+      <div class="item-detail-card">
+        <!-- Image Box -->
+        <div class="item-detail-image-box">
+          <img id="detailImage" src="" alt="Item Image">
+        </div>
+
+        <!-- Content Box -->
+        <div class="item-detail-content">
+          <div class="detail-badges">
+            <span class="badge-type" id="detailTypeBadge">Loading...</span>
+            <span class="badge-status" id="detailStatusBadge">Loading...</span>
+          </div>
+
+          <h1 class="detail-title" id="detailTitle">Loading item title...</h1>
+          <p class="detail-desc" id="detailDesc">Loading item description...</p>
+
+          <!-- Metadata table -->
+          <div class="detail-meta-list">
+            <div class="detail-meta-row">
+              <span class="detail-meta-label">🏷️ Category</span>
+              <span class="detail-meta-val" id="detailCategory">-</span>
+            </div>
+            <div class="detail-meta-row">
+              <span class="detail-meta-label">📍 Campus Location</span>
+              <span class="detail-meta-val" id="detailLocation">-</span>
+            </div>
+            <div class="detail-meta-row">
+              <span class="detail-meta-label">📅 Date Reported</span>
+              <span class="detail-meta-val" id="detailDate">-</span>
+            </div>
+            <div class="detail-meta-row">
+              <span class="detail-meta-label">👤 Posted By</span>
+              <span class="detail-meta-val" id="detailContactName">-</span>
+            </div>
+            <div class="detail-meta-row">
+              <span class="detail-meta-label">🎓 Student Reg No</span>
+              <span class="detail-meta-val" id="detailRegNo">-</span>
+            </div>
+            <div class="detail-meta-row">
+              <span class="detail-meta-label">📞 Contact Details</span>
+              <span class="detail-meta-val" id="detailContactInfo">-</span>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="detail-actions">
+            <button class="btn btn-primary" id="claimActionBtn">
+              ✋ This is Mine (Claim Item)
+            </button>
+            <a href="index.html" class="btn btn-outline-dark">Browse Other Items</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status Tracking Timeline -->
+      <div class="status-timeline">
+        <h3>📍 Item Status Lifecycle</h3>
+        <div class="timeline-steps">
+          <div class="timeline-step" id="timelineStep1">
+            <div class="step-circle">1</div>
+            <div class="step-label">Open / Reported</div>
+          </div>
+          <div class="timeline-step" id="timelineStep2">
+            <div class="step-circle">2</div>
+            <div class="step-label">Claim Pending</div>
+          </div>
+          <div class="timeline-step" id="timelineStep3">
+            <div class="step-circle">3</div>
+            <div class="step-label">Proof Verified</div>
+          </div>
+          <div class="timeline-step" id="timelineStep4">
+            <div class="step-circle">4</div>
+            <div class="step-label">Returned to Owner</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Claim Modal -->
+  <div class="modal-overlay" id="claimModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>🛡️ Submit Claim Verification</h3>
+        <button class="close-modal-btn" onclick="closeClaimModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="verification-hint">
+          💡 <strong>Security Check:</strong> To prevent false claims, please describe specific marks, inside contents, stickers, or unique details that only the true owner would know.
+        </div>
+
+        <form id="claimForm" onsubmit="submitClaim(event)">
+          <div class="form-group">
+            <label for="claimantName">Your Full Name <span class="req">*</span></label>
+            <input type="text" id="claimantName" class="form-control" placeholder="e.g. Aman Sharma" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="claimantReg">Registration No. <span class="req">*</span></label>
+              <input type="text" id="claimantReg" class="form-control" placeholder="e.g. 12214582" required>
+            </div>
+            <div class="form-group">
+              <label for="claimantPhone">Phone / WhatsApp <span class="req">*</span></label>
+              <input type="text" id="claimantPhone" class="form-control" placeholder="e.g. 9876543210" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="claimantProof">Proof of Ownership / Verification Details <span class="req">*</span></label>
+            <textarea id="claimantProof" class="form-control" placeholder="Describe any unique mark, passcode/pattern, stickers, wear and tear, or contents..." required></textarea>
+          </div>
+
+          <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 15px;">
+            <button type="button" class="btn btn-outline-dark" onclick="closeClaimModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Submit Verification Claim</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div>
+          <h4>LPU Lost & Found System</h4>
+          <p>An initiative to help Lovely Professional University students, faculty, and campus staff locate, report, and safely claim lost belongings across campus.</p>
+          <p>Lovely Professional University, Jalandhar - Delhi G.T. Road, Phagwara, Punjab (India) - 144411</p>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">🏠 Home Feed</a></li>
+            <li><a href="post.html">➕ Report an Item</a></li>
+            <li><a href="login.html">🔑 Student Login</a></li>
+            <li><a href="admin.html">🛡️ Admin Moderation</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Help & Security</h4>
+          <p>📍 Central Security Office, Block 29</p>
+          <p>📞 Security Helpline: 01824-517000</p>
+          <p>📧 support: lostandfound@lpu.in</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>LPU Lost & Found Portal | Lovely Professional University</p>
+        <p class="footer-credit">Made by: [Your Name] | Reg No: [Your Reg No] | Section: [Section]</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container"></div>
+
+  <!-- JavaScript Files -->
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      loadItemDetails();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- 
+  LPU Lost & Found System
+  Made by: [Your Name], Reg No: [Your Reg No], Section: [Section]
+  File: post.html (Report Lost or Found Item)
+-->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report an Item | LPU Lost & Found System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-bar">
+    <div class="container">
+      <span>🎒 Lovely Professional University Campus Lost & Found Community</span>
+      <span>Helpline: <strong>01824-517000</strong> | <a href="admin.html">Admin Portal</a></span>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">
+        <span class="nav-logo-badge">LPU</span>
+        <span>Lost<span class="highlight">&</span>Found</span>
+      </a>
+
+      <!-- Hamburger button for mobile -->
+      <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">☰</button>
+
+      <!-- Nav links -->
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="index.html" class="nav-link">🏠 Home</a></li>
+        <li><a href="post.html" class="nav-link active">➕ Post Item</a></li>
+        <li><a href="admin.html" class="nav-link">🛡️ Admin Panel</a></li>
+        <li id="navLoginLink"><a href="login.html" class="nav-link">🔑 Student Login</a></li>
+        <li>
+          <!-- Student user pill if logged in -->
+          <div id="navUserPill" class="user-pill" style="display: none;"></div>
+        </li>
+      </ul>
+
+      <!-- Nav actions (notifications) -->
+      <div class="nav-actions">
+        <div class="notif-wrapper">
+          <button class="notif-btn" id="notifBtn" title="Notifications" aria-label="Notifications">
+            🔔
+            <span class="notif-badge" id="notifBadge" style="display: none;">0</span>
+          </button>
+          
+          <div class="notif-dropdown" id="notifDropdown">
+            <div class="notif-header">
+              <h4>🔔 Campus Updates</h4>
+              <button class="clear-notif-btn" onclick="markAllNotificationsRead()">Mark read</button>
+            </div>
+            <div class="notif-list" id="notifList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Page Content -->
+  <main class="page-wrapper">
+    <div class="container">
+      
+      <div class="form-card">
+        <div class="form-header">
+          <h2 id="postFormHeading">Report a Lost or Found Item</h2>
+          <p>Provide accurate details so your fellow LPU students or security staff can help you.</p>
+        </div>
+
+        <!-- Lost / Found Toggle Buttons -->
+        <div class="type-toggle-container">
+          <button type="button" class="type-toggle-btn active lost" id="typeLostBtn" onclick="setPostType('Lost')">
+            🔴 I Lost an Item
+          </button>
+          <button type="button" class="type-toggle-btn" id="typeFoundBtn" onclick="setPostType('Found')">
+            🟢 I Found an Item
+          </button>
+        </div>
+
+        <!-- Form -->
+        <form id="postItemForm" onsubmit="addItem(event)" novalidate>
+          
+          <!-- Item Title -->
+          <div class="form-group">
+            <label for="postTitle">Item Name / Title <span class="req">*</span></label>
+            <input type="text" id="postTitle" class="form-control" placeholder="e.g. Blue LPU ID Card or HP Laptop Charger">
+            <div class="error-message" id="titleError"></div>
+          </div>
+
+          <!-- Category & Location -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="postCategory">Category <span class="req">*</span></label>
+              <select id="postCategory" class="form-control">
+                <option value="">-- Select Category --</option>
+                <option value="ID card">ID Card</option>
+                <option value="Phone">Phone / Electronics</option>
+                <option value="Wallet">Wallet / Purse</option>
+                <option value="Laptop/Charger">Laptop / Charger</option>
+                <option value="Books">Books / Notes / Stationery</option>
+                <option value="Keys">Keys</option>
+                <option value="Bottle">Water Bottle</option>
+                <option value="Other">Other</option>
+              </select>
+              <div class="error-message" id="categoryError"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="postLocation">Campus Location <span class="req">*</span></label>
+              <select id="postLocation" class="form-control">
+                <option value="">-- Select Location --</option>
+                <option value="Block 32">Block 32</option>
+                <option value="Block 34">Block 34</option>
+                <option value="Block 38">Block 38</option>
+                <option value="Unipolis">Unipolis</option>
+                <option value="Uni Mall">Uni Mall</option>
+                <option value="Library">Central Library</option>
+                <option value="Ground">Playground / Sports Ground</option>
+                <option value="Food Court">Food Court</option>
+                <option value="Hostel">Hostel (BH / GH)</option>
+                <option value="Other">Other Campus Area</option>
+              </select>
+              <div class="error-message" id="locationError"></div>
+            </div>
+          </div>
+
+          <!-- Date & Reg No -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="postDate">Date (Lost/Found) <span class="req">*</span></label>
+              <input type="date" id="postDate" class="form-control">
+              <div class="error-message" id="dateError"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="postReg">Student Reg No. (Optional)</label>
+              <input type="text" id="postReg" class="form-control" placeholder="e.g. 12214582">
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="form-group">
+            <label for="postDesc">Detailed Description <span class="req">*</span></label>
+            <textarea id="postDesc" class="form-control" placeholder="Describe specific details, markings, color, brand, exact room/floor or circumstances..."></textarea>
+            <div class="error-message" id="descError"></div>
+          </div>
+
+          <!-- Photo Upload (base64) -->
+          <div class="form-group">
+            <label>Item Photograph (Optional)</label>
+            <div class="photo-upload-box" onclick="document.getElementById('photoFileInput').click()">
+              <div style="font-size: 28px;">📷</div>
+              <div class="photo-upload-text"><strong>Click to upload photo</strong> (PNG, JPG, max 3MB)</div>
+              <div style="font-size: 11px; color: #adb5bd;">If not provided, a clean category icon will be assigned.</div>
+              <img id="photoPreview" class="photo-preview" alt="Preview">
+            </div>
+            <input type="file" id="photoFileInput" accept="image/*" style="display: none;" onchange="handlePhotoUpload(this)">
+          </div>
+
+          <!-- Contact Details -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="postName">Your Name <span class="req">*</span></label>
+              <input type="text" id="postName" class="form-control" placeholder="e.g. Aman Sharma">
+              <div class="error-message" id="nameError"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="postContact">Contact Phone or LPU Email <span class="req">*</span></label>
+              <input type="text" id="postContact" class="form-control" placeholder="e.g. 9876543210 or name.122@lpu.in">
+              <div class="error-message" id="contactError"></div>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn btn-primary btn-block" style="padding: 12px; font-size: 16px; margin-top: 10px;">
+            🚀 Submit Post
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div>
+          <h4>LPU Lost & Found System</h4>
+          <p>An initiative to help Lovely Professional University students, faculty, and campus staff locate, report, and safely claim lost belongings across campus.</p>
+          <p>Lovely Professional University, Jalandhar - Delhi G.T. Road, Phagwara, Punjab (India) - 144411</p>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">🏠 Home Feed</a></li>
+            <li><a href="post.html">➕ Report an Item</a></li>
+            <li><a href="login.html">🔑 Student Login</a></li>
+            <li><a href="admin.html">🛡️ Admin Moderation</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Help & Security</h4>
+          <p>📍 Central Security Office, Block 29</p>
+          <p>📞 Security Helpline: 01824-517000</p>
+          <p>📧 support: lostandfound@lpu.in</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>LPU Lost & Found Portal | Lovely Professional University</p>
+        <p class="footer-credit">Made by: [Your Name] | Reg No: [Your Reg No] | Section: [Section]</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container"></div>
+
+  <!-- JavaScript Files -->
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      setupPostForm();
+
+      // check if URL has ?type=Lost or ?type=Found
+      var params = new URLSearchParams(window.location.search);
+      var typeParam = params.get("type");
+      if (typeParam === "Found") {
+        setPostType("Found");
+      } else {
+        setPostType("Lost");
+      }
+    });
+  </script>
+</body>
+</html>

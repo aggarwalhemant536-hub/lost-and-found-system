@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- 
+  LPU Lost & Found System
+  Made by: [Your Name], Reg No: [Your Reg No], Section: [Section]
+  File: index.html (Homepage and Item Listing)
+-->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LPU Lost & Found System | Lovely Professional University</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-bar">
+    <div class="container">
+      <span>🎒 Lovely Professional University Campus Lost & Found Community</span>
+      <span>Helpline: <strong>01824-517000</strong> | <a href="admin.html">Admin Portal</a></span>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">
+        <span class="nav-logo-badge">LPU</span>
+        <span>Lost<span class="highlight">&</span>Found</span>
+      </a>
+
+      <!-- Hamburger button for mobile -->
+      <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">☰</button>
+
+      <!-- Nav links -->
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="index.html" class="nav-link active">🏠 Home</a></li>
+        <li><a href="post.html" class="nav-link">➕ Post Item</a></li>
+        <li><a href="admin.html" class="nav-link">🛡️ Admin Panel</a></li>
+        <li id="navLoginLink"><a href="login.html" class="nav-link">🔑 Student Login</a></li>
+        <li>
+          <!-- Student user pill if logged in -->
+          <div id="navUserPill" class="user-pill" style="display: none;"></div>
+        </li>
+      </ul>
+
+      <!-- Nav actions (notifications) -->
+      <div class="nav-actions">
+        <div class="notif-wrapper">
+          <button class="notif-btn" id="notifBtn" title="Notifications" aria-label="Notifications">
+            🔔
+            <span class="notif-badge" id="notifBadge" style="display: none;">0</span>
+          </button>
+          
+          <!-- Dropdown menu for notifications -->
+          <div class="notif-dropdown" id="notifDropdown">
+            <div class="notif-header">
+              <h4>🔔 Campus Updates</h4>
+              <button class="clear-notif-btn" onclick="markAllNotificationsRead()">Mark read</button>
+            </div>
+            <div class="notif-list" id="notifList">
+              <!-- populated dynamically by script.js -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Banner -->
+  <header class="hero">
+    <div class="container">
+      <h1>LPU <span>Lost & Found</span> Portal</h1>
+      <p>A centralized platform for Lovely Professional University students and faculty to report, track, and recover lost campus belongings.</p>
+      
+      <div class="hero-actions">
+        <a href="post.html?type=Lost" class="btn btn-danger">📢 I Lost Something</a>
+        <a href="post.html?type=Found" class="btn btn-success">🙌 I Found Something</a>
+      </div>
+
+      <!-- Animated Stats Counters -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number" id="statTotal">0</div>
+          <div class="stat-label">📦 Total Items Reported</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="statReturned">0</div>
+          <div class="stat-label">🤝 Belongings Returned</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="statLost">0</div>
+          <div class="stat-label">🔍 Active Search Items</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="container">
+    
+    <!-- Search and Filter Section -->
+    <section class="filter-section">
+      <!-- Live Search Bar -->
+      <div class="search-row">
+        <div class="search-input-box">
+          <span>🔍</span>
+          <input type="text" id="searchInput" placeholder="Search by item name, details, block or brand (e.g., HP charger, ID card, Uni Mall)..." oninput="filterItems()">
+        </div>
+      </div>
+
+      <!-- Filter dropdowns -->
+      <div class="filters-row">
+        <div class="filter-group">
+          <label>Item Type</label>
+          <select id="typeFilter" class="filter-select" onchange="filterItems()">
+            <option value="All">All Types (Lost & Found)</option>
+            <option value="Lost">Lost Items Only</option>
+            <option value="Found">Found Items Only</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Category</label>
+          <select id="categoryFilter" class="filter-select" onchange="filterItems()">
+            <option value="All">All Categories</option>
+            <option value="ID card">ID Card</option>
+            <option value="Phone">Phone / Electronics</option>
+            <option value="Wallet">Wallet / Purse</option>
+            <option value="Laptop/Charger">Laptop / Charger</option>
+            <option value="Books">Books / Notes</option>
+            <option value="Keys">Keys</option>
+            <option value="Bottle">Bottle</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Campus Location</label>
+          <select id="locationFilter" class="filter-select" onchange="filterItems()">
+            <option value="All">All Locations</option>
+            <option value="Block 32">Block 32</option>
+            <option value="Block 34">Block 34</option>
+            <option value="Block 38">Block 38</option>
+            <option value="Unipolis">Unipolis</option>
+            <option value="Uni Mall">Uni Mall</option>
+            <option value="Library">Central Library</option>
+            <option value="Ground">Playground / Sports</option>
+            <option value="Food Court">Food Court</option>
+            <option value="Hostel">Hostels (BH / GH)</option>
+            <option value="Other">Other Campus Area</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Status</label>
+          <select id="statusFilter" class="filter-select" onchange="filterItems()">
+            <option value="All">All Statuses</option>
+            <option value="Open">Open</option>
+            <option value="Claim Pending">Claim Pending</option>
+            <option value="Verified">Verified</option>
+            <option value="Returned">Returned</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Sort By</label>
+          <select id="sortFilter" class="filter-select" onchange="filterItems()">
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+          </select>
+        </div>
+
+        <button class="btn btn-outline-dark reset-filter-btn" onclick="resetFilters()">Reset</button>
+      </div>
+    </section>
+
+    <!-- Item Listing Header -->
+    <div class="section-header">
+      <h2 class="section-title">📋 Campus Belongings Feed</h2>
+      <span class="item-count-text" id="itemCountText">Showing 0 items</span>
+    </div>
+
+    <!-- Cards Grid Container -->
+    <div class="items-grid" id="itemsContainer">
+      <!-- Populated dynamically by script.js -->
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div>
+          <h4>LPU Lost & Found System</h4>
+          <p>An initiative to help Lovely Professional University students, faculty, and campus staff locate, report, and safely claim lost belongings across campus.</p>
+          <p>Lovely Professional University, Jalandhar - Delhi G.T. Road, Phagwara, Punjab (India) - 144411</p>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">🏠 Home Feed</a></li>
+            <li><a href="post.html">➕ Report an Item</a></li>
+            <li><a href="login.html">🔑 Student Login</a></li>
+            <li><a href="admin.html">🛡️ Admin Moderation</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Help & Security</h4>
+          <p>📍 Central Security Office, Block 29</p>
+          <p>📞 Security Helpline: 01824-517000</p>
+          <p>📧 support: lostandfound@lpu.in</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>LPU Lost & Found Portal | Lovely Professional University</p>
+        <p class="footer-credit">Made by: [Your Name] | Reg No: [Your Reg No] | Section: [Section]</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container"></div>
+
+  <!-- JavaScript Files -->
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // initialize home page
+    document.addEventListener("DOMContentLoaded", function () {
+      animateCounters();
+      filterItems();
+    });
+  </script>
+</body>
+</html>

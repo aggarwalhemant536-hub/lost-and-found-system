@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- 
+  LPU Lost & Found System
+  Made by: [Your Name], Reg No: [Your Reg No], Section: [Section]
+  File: login.html (Simple Student Login)
+-->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Login | LPU Lost & Found System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-bar">
+    <div class="container">
+      <span>🎒 Lovely Professional University Campus Lost & Found Community</span>
+      <span>Helpline: <strong>01824-517000</strong> | <a href="admin.html">Admin Portal</a></span>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">
+        <span class="nav-logo-badge">LPU</span>
+        <span>Lost<span class="highlight">&</span>Found</span>
+      </a>
+
+      <!-- Hamburger button for mobile -->
+      <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">☰</button>
+
+      <!-- Nav links -->
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="index.html" class="nav-link">🏠 Home</a></li>
+        <li><a href="post.html" class="nav-link">➕ Post Item</a></li>
+        <li><a href="admin.html" class="nav-link">🛡️ Admin Panel</a></li>
+        <li id="navLoginLink"><a href="login.html" class="nav-link active">🔑 Student Login</a></li>
+        <li>
+          <!-- Student user pill if logged in -->
+          <div id="navUserPill" class="user-pill" style="display: none;"></div>
+        </li>
+      </ul>
+
+      <!-- Nav actions (notifications) -->
+      <div class="nav-actions">
+        <div class="notif-wrapper">
+          <button class="notif-btn" id="notifBtn" title="Notifications" aria-label="Notifications">
+            🔔
+            <span class="notif-badge" id="notifBadge" style="display: none;">0</span>
+          </button>
+          
+          <div class="notif-dropdown" id="notifDropdown">
+            <div class="notif-header">
+              <h4>🔔 Campus Updates</h4>
+              <button class="clear-notif-btn" onclick="markAllNotificationsRead()">Mark read</button>
+            </div>
+            <div class="notif-list" id="notifList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="page-wrapper">
+    <div class="container">
+      
+      <div class="form-card">
+        <div class="form-header">
+          <h2>🎓 Student Identification</h2>
+          <p>Sign in with your LPU registration number to quickly submit reports and claim items with one click.</p>
+        </div>
+
+        <div style="background: #e0f2fe; border-left: 3px solid #0284c7; padding: 10px 14px; font-size: 13px; color: #0369a1; border-radius: 4px; margin-bottom: 20px; display:flex; justify-content:space-between; align-items:center;">
+          <span>💡 Quick demo? Click to pre-fill test student data.</span>
+          <button type="button" class="btn btn-sm btn-outline-dark" onclick="fillSampleStudent()" style="background:#fff;">Auto Fill</button>
+        </div>
+
+        <form id="studentLoginForm" onsubmit="loginStudent(event)">
+          <div class="form-group">
+            <label for="studentName">Student Full Name <span class="req">*</span></label>
+            <input type="text" id="studentName" class="form-control" placeholder="e.g. Aman Sharma" required>
+          </div>
+
+          <div class="form-group">
+            <label for="studentReg">LPU Registration Number <span class="req">*</span></label>
+            <input type="text" id="studentReg" class="form-control" placeholder="e.g. 12214582 (8 digits)" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="studentSection">Section / Group</label>
+              <input type="text" id="studentSection" class="form-control" placeholder="e.g. K22SE or D2201">
+            </div>
+
+            <div class="form-group">
+              <label for="studentPhone">Mobile Number (Optional)</label>
+              <input type="tel" id="studentPhone" class="form-control" placeholder="e.g. 9876543210">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" style="padding: 12px; font-size: 15px; margin-top: 10px;">
+            🎓 Continue as Student
+          </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 25px; padding-top: 20px; border-top: 1px solid #e9ecef; font-size: 13px; color: #6c757d;">
+          Campus Staff or Admin? <a href="admin.html" style="color: #ff6f00; font-weight: 600;">Go to Admin Portal (admin / admin123)</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div>
+          <h4>LPU Lost & Found System</h4>
+          <p>An initiative to help Lovely Professional University students, faculty, and campus staff locate, report, and safely claim lost belongings across campus.</p>
+          <p>Lovely Professional University, Jalandhar - Delhi G.T. Road, Phagwara, Punjab (India) - 144411</p>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">🏠 Home Feed</a></li>
+            <li><a href="post.html">➕ Report an Item</a></li>
+            <li><a href="login.html">🔑 Student Login</a></li>
+            <li><a href="admin.html">🛡️ Admin Moderation</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Help & Security</h4>
+          <p>📍 Central Security Office, Block 29</p>
+          <p>📞 Security Helpline: 01824-517000</p>
+          <p>📧 support: lostandfound@lpu.in</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>LPU Lost & Found Portal | Lovely Professional University</p>
+        <p class="footer-credit">Made by: [Your Name] | Reg No: [Your Reg No] | Section: [Section]</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container"></div>
+
+  <!-- JavaScript Files -->
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

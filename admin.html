@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- 
+  LPU Lost & Found System
+  Made by: [Your Name], Reg No: [Your Reg No], Section: [Section]
+  File: admin.html (Admin Moderation Panel)
+-->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Moderation Panel | LPU Lost & Found</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-bar">
+    <div class="container">
+      <span>🎒 Lovely Professional University Campus Lost & Found Community</span>
+      <span>Helpline: <strong>01824-517000</strong> | <a href="admin.html">Admin Portal</a></span>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">
+        <span class="nav-logo-badge">LPU</span>
+        <span>Lost<span class="highlight">&</span>Found <span class="admin-badge">ADMIN</span></span>
+      </a>
+
+      <!-- Hamburger button for mobile -->
+      <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">☰</button>
+
+      <!-- Nav links -->
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="index.html" class="nav-link">🏠 Home</a></li>
+        <li><a href="post.html" class="nav-link">➕ Post Item</a></li>
+        <li><a href="admin.html" class="nav-link active">🛡️ Admin Panel</a></li>
+        <li id="navLoginLink"><a href="login.html" class="nav-link">🔑 Student Login</a></li>
+        <li>
+          <div id="navUserPill" class="user-pill" style="display: none;"></div>
+        </li>
+      </ul>
+
+      <!-- Nav actions (notifications) -->
+      <div class="nav-actions">
+        <div class="notif-wrapper">
+          <button class="notif-btn" id="notifBtn" title="Notifications" aria-label="Notifications">
+            🔔
+            <span class="notif-badge" id="notifBadge" style="display: none;">0</span>
+          </button>
+          
+          <div class="notif-dropdown" id="notifDropdown">
+            <div class="notif-header">
+              <h4>🔔 Campus Updates</h4>
+              <button class="clear-notif-btn" onclick="markAllNotificationsRead()">Mark read</button>
+            </div>
+            <div class="notif-list" id="notifList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="page-wrapper">
+    <div class="container">
+
+      <!-- Admin Login Box (shown when not authenticated) -->
+      <div id="adminLoginBox" class="form-card" style="display: none;">
+        <div class="form-header">
+          <h2>🛡️ Admin Authentication</h2>
+          <p>Please enter administrative credentials to moderate campus reports and verify claims.</p>
+        </div>
+
+        <div class="verification-hint" style="margin-bottom: 20px;">
+          🔑 <strong>Evaluation Credentials:</strong><br>
+          Username: <code>admin</code><br>
+          Password: <code>admin123</code>
+        </div>
+
+        <form onsubmit="loginAdmin(event)">
+          <div class="form-group">
+            <label for="adminUser">Admin Username</label>
+            <input type="text" id="adminUser" class="form-control" placeholder="admin" value="admin" required>
+          </div>
+
+          <div class="form-group">
+            <label for="adminPass">Admin Password</label>
+            <input type="password" id="adminPass" class="form-control" placeholder="admin123" value="admin123" required>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" style="padding: 12px; margin-top: 10px;">
+            🔓 Unlock Admin Panel
+          </button>
+        </form>
+      </div>
+
+      <!-- Admin Dashboard (shown when authenticated) -->
+      <div id="adminDashboard" style="display: none;">
+        
+        <!-- Header row -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <h2 style="font-size: 24px; font-weight: 700; color: #212529;">Campus Moderation Dashboard</h2>
+            <p style="color: #6c757d; font-size: 14px;">Review student reports, verify proof answers, and manage returned items.</p>
+          </div>
+
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn-outline-dark btn-sm" onclick="resetToSampleData()">🔄 Reset Sample Data</button>
+            <button class="btn btn-danger btn-sm" onclick="logoutAdmin()">🚪 Logout Admin</button>
+          </div>
+        </div>
+
+        <!-- Stat summaries -->
+        <div class="stats-grid" style="margin-bottom: 30px;">
+          <div class="stat-card" style="background: #ffffff; border: 1px solid #e5e7eb;">
+            <div class="stat-number" id="adminStatTotal" style="color: #212529;">0</div>
+            <div class="stat-label" style="color: #6c757d;">📦 Total Campus Items</div>
+          </div>
+          <div class="stat-card" style="background: #ffffff; border: 1px solid #e5e7eb;">
+            <div class="stat-number" id="adminStatClaims" style="color: #ff6f00;">0</div>
+            <div class="stat-label" style="color: #6c757d;">✋ Pending Claims to Verify</div>
+          </div>
+          <div class="stat-card" style="background: #ffffff; border: 1px solid #e5e7eb;">
+            <div class="stat-number" id="adminStatReturned" style="color: #198754;">0</div>
+            <div class="stat-label" style="color: #6c757d;">✅ Successfully Returned</div>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="admin-tabs">
+          <button class="admin-tab-btn active" id="adminTabItems" onclick="switchAdminTab('items')">
+            📋 All Items Moderation
+          </button>
+          <button class="admin-tab-btn" id="adminTabClaims" onclick="switchAdminTab('claims')">
+            🔍 Review Verification Claims
+          </button>
+        </div>
+
+        <!-- View 1: All Items Table -->
+        <div id="adminItemsView">
+          <div class="admin-card">
+            <h3 style="font-size: 16px; margin-bottom: 15px;">Active Campus Reports</h3>
+            <div class="admin-table-wrapper">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Item Title</th>
+                    <th>Type</th>
+                    <th>Category</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th>Posted By</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="adminTableBody">
+                  <!-- Populated dynamically by script.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- View 2: Claims Review -->
+        <div id="adminClaimsView" style="display: none;">
+          <div class="admin-card">
+            <h3 style="font-size: 16px; margin-bottom: 15px;">Claims Verification Requests</h3>
+            <div id="adminClaimsContainer">
+              <!-- Populated dynamically by script.js -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div>
+          <h4>LPU Lost & Found System</h4>
+          <p>An initiative to help Lovely Professional University students, faculty, and campus staff locate, report, and safely claim lost belongings across campus.</p>
+          <p>Lovely Professional University, Jalandhar - Delhi G.T. Road, Phagwara, Punjab (India) - 144411</p>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">🏠 Home Feed</a></li>
+            <li><a href="post.html">➕ Report an Item</a></li>
+            <li><a href="login.html">🔑 Student Login</a></li>
+            <li><a href="admin.html">🛡️ Admin Moderation</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Help & Security</h4>
+          <p>📍 Central Security Office, Block 29</p>
+          <p>📞 Security Helpline: 01824-517000</p>
+          <p>📧 support: lostandfound@lpu.in</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>LPU Lost & Found Portal | Lovely Professional University</p>
+        <p class="footer-credit">Made by: [Your Name] | Reg No: [Your Reg No] | Section: [Section]</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container"></div>
+
+  <!-- JavaScript Files -->
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      checkAdminAuth();
+    });
+  </script>
+</body>
+</html>
