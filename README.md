@@ -1,7 +1,7 @@
 # LPU Lost & Found System
 **A centralized campus belongings portal for Lovely Professional University (LPU)**
 
-*Made by: [Your Name] | Registration No: [Your Reg No] | Section: [Section]*  
+*Made by: [Hemant Aggarwal] | Registration No: [12615061] | Section: K3P26SP*  
 *Lovely Professional University, Phagwara, Punjab*
 
 ---
